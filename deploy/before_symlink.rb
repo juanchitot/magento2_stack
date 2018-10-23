@@ -43,14 +43,13 @@ end
 execute 'chmod-files' do
 	command "chmod -R g+w #{release_path}"
 end
-execute 'copy-pub/media-data' do
-	command "cp -ar #{release_path}/pub/media/. #{shared_path}/media/ && rm -rdf #{release_path}/pub/media"
+#execute 'copy-pub/media-data' do
+	#command "cp -ar #{release_path}/pub/media/. #{shared_path}/media/ && rm -rdf #{release_path}/pub/media"
+#end
 
-end
-
-link "#{release_path}/pub/media" do
-   to "#{shared_path}/media/"
-end
+#link "#{release_path}/pub/media" do
+#   to "#{shared_path}/media/"
+#end
 
 
 
@@ -64,9 +63,9 @@ end
 #  command "composer install"
 #  cwd "#{release_path}"
 #end
-execute 'chmod-bin-magento' do
-	command "chmod +x #{release_path}/bin/magento"
-end
+#execute 'chmod-bin-magento' do
+#	command "chmod +x #{release_path}/bin/magento"
+#end
 
 ######################
 
@@ -134,50 +133,49 @@ end
 #   }, "#{release_path}/app/etc/local.xml"
 # )
 ##############################################
-ruby_block 'install vendendor' do
-        block do
-            vendor_command = "ruby #{release_path}/deploy/VendorDownloader.rb '#{environment_data['vendor_bucket']}'  '#{release_path}'"
-            stdout_str, stderr_str, status = Open3.capture3(vendor_command)
-              if status.success?
-                    Chef::Log.info "#{stdout_str}"			            
-              else
-                    Chef::Log.info "#{stderr_str}"			
-              end                
-        end
-        action :run
-end
+#ruby_block 'install vendendor' do
+#        block do
+#            vendor_command = "ruby #{release_path}/deploy/VendorDownloader.rb '#{environment_data['vendor_bucket']}'  '#{release_path}'"
+#            stdout_str, stderr_str, status = Open3.capture3(vendor_command)
+#              if status.success?
+#                    Chef::Log.info "#{stdout_str}"
+#              else
+#                    Chef::Log.info "#{stderr_str}"
+#              end
+#        end
+#        action :run
+#end
 
 #execute 'install-vendor' do
 #  command 
 #  live_stream true
 #  cwd "#{release_path}"
 #end
-execute 'enable-modules' do
-  command "#{release_path}/bin/magento  module:enable --all"
-  cwd "#{release_path}"
-end
+#execute 'enable-modules' do
+#  command "#{release_path}/bin/magento  module:enable --all"
+#  cwd "#{release_path}"
+#end
 
-execute 'di-compile' do
-  command "#{release_path}/bin/magento  setup:di:compile"
-  cwd "#{release_path}"
-end
+#execute 'di-compile' do
+#  command "#{release_path}/bin/magento  setup:di:compile"
+#  cwd "#{release_path}"
+#end
 
-execute 'set-database' do
-  command "#{release_path}/bin/magento  setup:config:set --db-host='#{environment_data['address']}' --db-user='#{environment_data['db_user']}' --db-password='#{environment_data['db_password']}' --backend-frontname='epoliceadmin500A' --db-name=shop"
-   cwd "#{release_path}"
-end
+#execute 'set-database' do
+#  command "#{release_path}/bin/magento  setup:config:set --db-host='#{environment_data['address']}' --db-user='#{environment_data['db_user']}' --db-password='#{environment_data['db_password']}' --backend-frontname='epoliceadmin500A' --db-name=shop"
+#   cwd "#{release_path}"
+#end
 
+#execute 'hack_magento_install' do
+#  command "php #{release_path}/deploy/install_hack.php"
+#  cwd "#{release_path}/deploy"
+#end
 
-execute 'hack_magento_install' do
-  command "php #{release_path}/deploy/install_hack.php" 
-  cwd "#{release_path}/deploy"
-end
-
-execute 'deploy_static_content' do
-  command "#{release_path}/bin/magento setup:static-content:deploy en_US" 
-  cwd "#{release_path}/deploy"
-  ignore_failure true
-end
+#execute 'deploy_static_content' do
+#  command "#{release_path}/bin/magento setup:static-content:deploy en_US"
+#  cwd "#{release_path}/deploy"
+#  ignore_failure true
+#end
 
 
 
